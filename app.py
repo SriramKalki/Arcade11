@@ -1,20 +1,25 @@
+# Update app.py to fix variable scope issue
 from flask import Flask, render_template, request, redirect, url_for, flash
 from transformers import MarianMTModel, MarianTokenizer
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
-# Load pre-trained model and tokenizer
-model_name = 'Helsinki-NLP/opus-mt-en-ROMANCE'
-tokenizer = MarianTokenizer.from_pretrained(model_name)
-model = MarianMTModel.from_pretrained(model_name)
+# Define a dictionary to map target languages to their respective model names
+model_names = {
+    'es': 'Helsinki-NLP/opus-mt-en-es',
+    'fr': 'Helsinki-NLP/opus-mt-en-fr',
+    'de': 'Helsinki-NLP/opus-mt-en-de',
+    'zh': 'Helsinki-NLP/opus-mt-en-zh'
+}
+
+# Load the models and tokenizers for each target language
+models = {lang: MarianMTModel.from_pretrained(model_name) for lang, model_name in model_names.items()}
+tokenizers = {lang: MarianTokenizer.from_pretrained(model_name) for lang, model_name in model_names.items()}
 
 def translate_text(text, target_language):
-    # Update the tokenizer and model to use the correct target language
-    tokenizer.src_lang = 'en'
-    model_name = f'Helsinki-NLP/opus-mt-en-{target_language}'
-    tokenizer = MarianTokenizer.from_pretrained(model_name)
-    model = MarianMTModel.from_pretrained(model_name)
+    tokenizer = tokenizers[target_language]
+    model = models[target_language]
 
     inputs = tokenizer.encode(text, return_tensors='pt')
     translated = model.generate(inputs, max_length=512, num_beams=5, early_stopping=True)

@@ -3,13 +3,21 @@
   <head>
     <meta charset='utf-8'>
     <title>Translation Result</title>
+    <link rel='stylesheet' href='/static/styles.css'>
   </head>
   <body>
-    <h1>Translation Result</h1>
-    <h2>Original Text</h2>
-    <p>{{ original_text }}</p>
-    <h2>Translated Text ({{ target_language }})</h2>
-    <p>{{ translated_text }}</p>
-    <a href='/'>Translate another text</a>
+    <header>
+      <h1>Translation Result</h1>
+    </header>
+    <div class="container result-container">
+      <h2>Original Text</h2>
+      <p>{{ original_text }}</p>
+      <h2>Translated Text ({{ target_language }})</h2>
+      <p>{{ translated_text }}</p>
+      <a href='/'><button>Translate another text</button></a>
+    </div>
+    <footer>
+      <p>&copy; 2024 Language Translation App</p>
+    </footer>
   </body>
 </html>
